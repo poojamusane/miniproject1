@@ -66,5 +66,32 @@ router.post("/updateuser", (req, res) => {
         }
     })
 })
+
+
+//Update product in cart
+router.post("/updatecart", (req, res) => {
+    let p_id = req.body.p_id
+    let u_name = req.body.u_name
+    let obj = { "p_quantity": req.body.p_quantity }
+    //connect to mongodb
+    mcl.connect(url, (err, conn) => {
+
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db('miniproject')
+            db.collection('cart').updateOne({ p_id, u_name }, { $set: obj }, (err) => {
+                if (err)
+                    res.json({ 'cartUpdate': 'Error ' + err })
+                else {
+                    console.log(`Cart Data for ${u_name} updated`)
+                    
+                    res.json({ 'cartUpdate': 'Success' })
+                    conn.close()
+                }
+            })
+        }
+    })
+})
 //export router
 module.exports = router

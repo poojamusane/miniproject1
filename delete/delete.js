@@ -58,5 +58,32 @@ router.post("/deleteuser", (req, res) => {
         }
     })
 })
+
+
+
+//Delete product from cart
+router.post("/deletecart", (req, res) => {
+    let obj = {
+        "p_id": req.body.p_id,
+        "u_name" : req.body.u_name
+    }
+    //connect to mongodb
+    mcl.connect(url, (err, conn) => {
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db('miniproject')
+            db.collection('cart').deleteOne(obj, (err) => {
+                if (err)
+                    res.json({ 'cartDelete': 'Error ' + err })
+                else {
+                    console.log(`Cart data for ${obj.u_name} deleted`)
+                    res.json({ 'cartDelete': 'Success' })
+                    conn.close()
+                }
+            })
+        }
+    })
+})
 //export router
 module.exports = router

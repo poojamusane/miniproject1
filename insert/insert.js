@@ -67,5 +67,33 @@ router.post("/insertuser", (req, res) => {
     })
 })
 
+
+
+//insert product into cart
+router.post("/cartinsert", (req, res) => {
+    let obj = {
+        "u_name" : req.body.u_name,
+        "p_id" : req.body.p_id,
+        "p_cost" : req.body.p_cost,
+        "p_qty" : req.body.p_qty
+    }
+    //connect to mongodb
+    mcl.connect(url, (err, conn) => {
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db('miniproject')
+            db.collection('cart').insertOne(obj,(err)=>{
+                if(err)
+                    res.json({'cartInsert':'Error '+err})
+                else{
+                    console.log('Product in cart inserted quantity:- ',obj.p_qty)
+                    res.json({'cartInsert':'Success'})
+                    conn.close()
+                }
+            })
+        }
+    })
+})
 //export router
 module.exports = router

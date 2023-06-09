@@ -80,5 +80,28 @@ router.post("/userauth", (req, res) => {
     })
 })
 
+
+//Fetch cart data
+router.get("/fetchcart", (req, res) => {
+    //connect to mongodb
+    let u_name = req.body.u_name
+    let obj = { u_name }    
+    mcl.connect(url, (err, conn) => {
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db("miniproject")
+            db.collection('cart').find(obj).toArray((err, array) => {
+                if (err)
+                    console.log(err)
+                else {
+                    res.json(array)
+                    console.log(`Cart for ${obj.u_name} sent`)
+                }
+                conn.close()
+            })
+        }
+    })
+})
 //export router
 module.exports = router
