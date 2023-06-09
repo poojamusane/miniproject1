@@ -27,5 +27,28 @@ conn.close()
 }
 })
 })
+
+
+// fetch api for user
+
+router.get("/fetchuser",(req, res)=>{
+    //connect to mongodb
+    mcl.connect(url,(err,conn)=>{
+    if(err)
+    console.log('Error in connection:- ',err)
+    else{
+    let db = conn.db("miniproject")
+    db.collection('user_login').find().toArray((err, array)=>{
+    if(err)
+    console.log(err)
+    else{
+    console.log('Data sent')
+    res.json(array)
+    conn.close()
+    }
+    })
+    }
+    })
+    })
 //export router
 module.exports = router

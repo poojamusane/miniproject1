@@ -32,5 +32,31 @@ router.post("/", (req, res) => {
         }
     })
 })
+
+// Delete user api
+router.post("/deleteuser", (req, res) => {
+  
+    let obj = {
+        "u_id": req.body.u_id
+       
+    }
+    //connect to mongodb
+    mcl.connect(url, (err, conn) => {
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db('miniproject')
+            db.collection('user_login').deleteOne(obj,(err)=>{
+                if(err)
+                    res.json({'delete':'Error '+err})
+                else{
+                    console.log('Data deleted')
+                    res.json({'delete':'Success'})
+                    conn.close()
+                }
+            })
+        }
+    })
+})
 //export router
 module.exports = router

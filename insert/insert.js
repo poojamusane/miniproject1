@@ -38,5 +38,34 @@ router.post("/", (req, res) => {
         }
     })
 })
+
+
+// user insert api
+router.post("/insertuser", (req, res) => {
+    let obj = {
+        "u_id": req.body.u_id,
+        "u_name": req.body.u_name,
+        "u_pwd": req.body.u_pwd,
+        "u_mail":req.body.u_mail
+    }
+    //connect to mongodb
+    mcl.connect(url, (err, conn) => {
+        if (err)
+            console.log('Error in connection:- ', err)
+        else {
+            let db = conn.db('miniproject')
+            db.collection('user_login').insertOne(obj,(err)=>{
+                if(err)
+                    res.json({'insert':'Error '+err})
+                else{
+                    console.log('Data inserted')
+                    res.json({'insert':'Success'})
+                    conn.close()
+                }
+            })
+        }
+    })
+})
+
 //export router
 module.exports = router
