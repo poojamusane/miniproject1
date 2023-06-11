@@ -75,7 +75,7 @@ router.post("/cartinsert", (req, res) => {
         "u_name" : req.body.u_name,
         "p_id" : req.body.p_id,
         "p_cost" : req.body.p_cost,
-        "p_qty" : req.body.p_qty
+        "p_qty" : req.body.p_quantity
     }
     //connect to mongodb
     mcl.connect(url, (err, conn) => {
@@ -87,7 +87,7 @@ router.post("/cartinsert", (req, res) => {
                 if(err)
                     res.json({'cartInsert':'Error '+err})
                 else{
-                    console.log('Product in cart inserted quantity:- ',obj.p_qty)
+                    console.log('Product in cart inserted quantity:- ',obj.p_quantity)
                     res.json({'cartInsert':'Success'})
                     conn.close()
                 }
